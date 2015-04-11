@@ -21,7 +21,7 @@ exports.test = function(callback)
 	log.debug('Running tests');
 	var tests = {};
 	var libs = [
-		'./lib/initSystem.js',
+		'./test/testInitSystem.js',
 	];
 	libs.forEach(function(lib)
 	{

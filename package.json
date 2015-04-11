@@ -12,7 +12,9 @@
 	},
 	"dependencies": {
 		"prototypes": "*",
-		"log": "1.4.*",
+		"log": "1.4.*"
+	},
+	"devDependencies": {
 		"testing": "*"
 	},
 	"keywords" : ["init", "init system", "initialization", "initialize", "events"],
@@ -21,7 +23,7 @@
 	},
 	"preferGlobal": false,
 	"scripts": {
-		"test": "node test.js"
+		"test": "node runTests.js"
 	},
 	"private": false
 }
