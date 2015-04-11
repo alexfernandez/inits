@@ -159,6 +159,31 @@ Can be used e.g. to call `process.exit()` (which `inits` doesn't do by itself).
 
 Sent when there is an error in any phase.
 
+## Options
+
+To configure `inits` you can set some attributes in `inits.options`
+that will modify how the init system behaves.
+
+### catchErrors
+
+If set to `true` (or any other truthy value),
+`inits` will catch uncaught exceptions and errors
+and shutdown automatically when any of those happens.
+Default: `true`.
+
+### catchSignals
+
+If set to `true` (or any other truthy value),
+`inits` will intercept SIGTERM and SIGKILL (e.g. control-C) signals
+and shutdown when one of them is received.
+Default: `true`.
+
+### showErrors
+
+If set to `true` (or any other truthy value),
+`inits` will show a log message for every error.
+Default: `true`.
+
 ## Full example
 
 How to make a web server that connects to a MongoDB database.
