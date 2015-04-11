@@ -10,7 +10,7 @@
 require('prototypes');
 var Log = require('log');
 var testing = require('testing');
-var InitSystem = require('../lib/initSystem.js').InitSystem;
+var inits = require('../lib/initSystem.js');
 
 // globals
 var log = new Log('info');
@@ -18,7 +18,7 @@ var log = new Log('info');
 
 function testInitSystem(callback)
 {
-	var system = new InitSystem();
+	var system = new inits.InitSystem();
 	var witness = {};
 	system.on('error', function(error)
 	{
@@ -65,7 +65,7 @@ function testInitSystem(callback)
 
 function testStandalone(callback)
 {
-	var system = new InitSystem();
+	var system = new inits.InitSystem();
 	var witness = {};
 	system.on('error', function(error)
 	{
@@ -100,7 +100,7 @@ function testStandalone(callback)
 
 function testSeveralCallbacks(callback)
 {
-	var system = new InitSystem();
+	var system = new inits.InitSystem();
 	var witness = {};
 	system.on('error', function(error)
 	{
@@ -162,6 +162,6 @@ exports.test = function(callback)
 if (__filename == process.argv[1])
 {
 	log = new Log('debug');
-	exports.test(testing.show);
+	inits.standalone(testing.toShow(exports.test));
 }
 
