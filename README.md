@@ -2,7 +2,8 @@
 
 A simple init system for Node.js.
 Manages initialization tasks, and optionally also shutdown tasks.
-Useful to simplify initialization of complex systems.
+Useful to simplify initialization of complex systems
+with asynchronous tasks.
 
 ## Installation
 
@@ -24,14 +25,100 @@ Or add `inits` to your `package.json`:
 
 and run `npm install`.
 
-## Phases
+## Lifecycle of a System
 
 There are four distinct phases in `inits`:
 
-* init
-* start
-* stop
-* finish
+* init,
+* start,
+* stop,
+* and finish.
+
+They are intended to be symmetric:
+if a certain capability is open in `init`
+it should be closed in `finish`,
+and whatever starts in `start`
+should be stopped in (surprise!) `stop`.
+
+### Init Phase
+
+Initialization tasks, such as connecting to the database.
+The init system will make sure that all `require`'d code files have been loaded
+before starting this phase.
+
+### Start Phase
+
+Tasks to start the system, such as starting a web server.
+These run after all `init` tasks have finished.
+
+### Stop Phase
+
+Tasks to stop the system, such as stopping any open servers.
+These run when the system initiates shutdown: either by a signal
+(SIGTERM, SIGKILL or control-C) or by an uncaught exception
+or an error.
+
+### Finish Phase
+
+Final shutdown tasks, such as disconnecting from the database:
+whatever needs to be done before the system definitely closes down.
+
+### Callbacks
+
+All callbacks passed to the four phases must receive another callback
+of the form `function(error)` following the Node.js convention,
+and chain-call them at the end with either an error
+or a falsy value (`null`, `undefined`, nothing) to signal success.
+
+Example:
+
+```
+inits.init(function(next)
+{
+    DatabaseDriver.connect(url, function(error, connected)
+    {
+        if (error)
+        {
+            return next(error);
+        }
+        db = connected;
+        next(null);
+    });
+});
+```
+
+Note how the callback `next` is invoked before the function ends;
+this allows `inits` to run asynchronous tasks,
+and to regain execution and run any other callbacks.
+
+If your callback is synchronous, simply invoke the callback at the end:
+
+```
+inits.finish(function(next)
+{
+    db.close();
+    next(null);
+});
+```
+
+Note: the choice of callback names is not important,
+we have used `next` here but `callback` elsewhere;
+whatever is clearer to you.
+
+### No Dependencies
+
+There is no dependency management in `inits`.
+This is deliberate; it would be much more complex
+for something that is not generally needed.
+If you need a certain task to run before another one,
+just run them in sequence.
+
+### Other Lifecycles
+
+Sometimes four phases are not enough.
+`inits` might be designed to support custom phases in the future
+if there is interest; just create an issue if you are interested,
+or even better, send a pull request.
 
 ## API
 
