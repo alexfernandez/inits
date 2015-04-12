@@ -146,6 +146,51 @@ function testSeveralCallbacks(callback)
 	});
 }
 
+function testExceptions(callback)
+{
+	var system = new inits.InitSystem();
+	system.options.showErrors = false;
+	var init1 = false;
+	system.on('error', function(error)
+	{
+		console.log('Error: %s', error);
+		if (error.contains('init1'))
+		{
+			init1 = true;
+			return;
+		}
+		else if (error.contains('finish1'))
+		{
+			testing.assert(init1, 'Should catch init1 error', callback);
+			testing.success(callback);
+		}
+		else
+		{
+			testing.failure('Invalid error ' + error);
+		}
+	});
+	system.init(function(next)
+	{
+		next('init1');
+	});
+	system.init(function(next)
+	{
+		next('init2');
+	});
+	system.start(function(next)
+	{
+		next('start');
+	});
+	system.finish(function(next)
+	{
+		next('finish1');
+	});
+	system.finish(function(next)
+	{
+		next('finish2');
+	});
+}
+
 /**
  * Run all tests.
  */
@@ -155,6 +200,7 @@ exports.test = function(callback)
 		testInitSystem,
 		testStandalone,
 		testSeveralCallbacks,
+		testExceptions,
 	], callback);
 };
 
