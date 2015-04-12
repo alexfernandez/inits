@@ -153,7 +153,6 @@ function testExceptions(callback)
 	var init1 = false;
 	system.on('error', function(error)
 	{
-		console.log('Error: %s', error);
 		if (error.contains('init1'))
 		{
 			init1 = true;
