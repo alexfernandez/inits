@@ -31,7 +31,7 @@ The following functions and events are exported directly by `inits`.
 
 ### inits.init(callback)
 
-Add an asynchronous callback to the initialization phase.
+Add an asynchronous callback to the init phase.
 The callback will receive a function parameter of the form
 `function(error)`; see below.
 
@@ -55,15 +55,18 @@ inits.init(function(next)
 
 ### inits.start(callback)
 
-Add an asynchronous callback to be invoked when starting (after initialization).
+Add an asynchronous callback to be invoked when starting
+(start phase, after init).
 
 ### inits.stop(callback)
 
-Add an asynchronous callback to be invoked when stopping.
+Add an asynchronous callback to be invoked when stopping
+(stop phase).
 
 ### inits.finish(callback)
 
-Add an asynchronous callback to be invoked before finishing.
+Add an asynchronous callback to be invoked before finishing
+(finish phase, after stop phase).
 
 ### inits.standalone(callback)
 
