@@ -184,6 +184,12 @@ If set to `true` (or any other truthy value),
 `inits` will show a log message for every error.
 Default: `true`.
 
+### logTimes
+
+If set to `true` (or any other truthy value),
+`inits` will log how long initialization and shutdown took.
+Default: `true`.
+
 ## Full example
 
 How to make a web server that connects to a MongoDB database.
