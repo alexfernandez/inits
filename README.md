@@ -1,3 +1,7 @@
+[![Build Status](https://secure.travis-ci.org/alexfernandez/inits.png)](http://travis-ci.org/alexfernandez/inits)
+
+[![Package quality](http://packagequality.com/badge/inits.png)](http://packagequality.com/#?package=inits)
+
 # inits
 
 A simple init system for Node.js.
