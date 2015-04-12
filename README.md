@@ -25,48 +25,77 @@ Or add `inits` to your `package.json`:
 
 and run `npm install`.
 
-## Lifecycle of a System
+## API
 
-There are four distinct phases in `inits`:
+The following functions and events are exported directly by `inits`.
 
-* init,
-* start,
-* stop,
-* and finish.
+### inits.init(callback)
 
-They are intended to be symmetric:
-if a certain capability is open in `init`
-it should be closed in `finish`,
-and whatever starts in `start`
-should be stopped in (surprise!) `stop`.
+Add an asynchronous callback to the initialization phase.
+The callback will receive a function parameter of the form
+`function(error)`; see below.
 
-### Init Phase
+Example:
 
-Initialization tasks, such as connecting to the database.
-The init system will make sure that all `require`'d code files have been loaded
-before starting this phase.
+```
+inits.init(function(next)
+{
+    doSomething(function(error)
+    {
+        if (error)
+        {
+            console.error('failure: %s', error);
+            next(error);
+        }
+        console.log('success');
+        next(null);
+    });
+});
+```
 
-### Start Phase
+### inits.start(callback)
 
-Tasks to start the system, such as starting a web server.
-These run after all `init` tasks have finished.
+Add an asynchronous callback to be invoked when starting (after initialization).
 
-### Stop Phase
+### inits.stop(callback)
 
-Tasks to stop the system, such as stopping any open servers.
-These run when the system initiates shutdown: either by a signal
-(SIGTERM, SIGKILL or control-C) or by an uncaught exception
-or an error.
+Add an asynchronous callback to be invoked when stopping.
 
-### Finish Phase
+### inits.finish(callback)
 
-Final shutdown tasks, such as disconnecting from the database:
-whatever needs to be done before the system definitely closes down.
+Add an asynchronous callback to be invoked before finishing.
 
-### Callbacks
+### inits.standalone(callback)
 
-All callbacks passed to the four phases must receive another callback
-of the form `function(error)` following the Node.js convention,
+Set an asynchronous callback as a standalone task.
+Useful when your script consists solely of a task
+that must run after startup, followed by shutdown.
+
+### Event: 'ready'
+
+Sent when initialization has finished and the system is ready.
+
+### Event: 'end'
+
+Sent after the system has finished and is about to exit.
+Can be used e.g. to call `process.exit()` (which `inits` doesn't do by itself).
+
+### Event: 'error'
+
+Sent when there is an error in any phase.
+
+### Events: 'initing', 'starting', 'stopping', 'finishing'
+
+Sent before the corresponding phases have run.
+
+### Events: 'inited', 'started', 'stopped', 'finished'
+
+Sent after the corresponding phases have run.
+
+## Callbacks
+
+All asynchronous callbacks passed to the four phases and to `standalone()`
+must receive another callback of the form `function(error)`, following the Node.js convention;
 and chain-call them at the end with either an error
 or a falsy value (`null`, `undefined`, nothing) to signal success.
 
@@ -101,63 +130,9 @@ inits.finish(function(next)
 });
 ```
 
-Note: the choice of callback names is not important,
+Note: the choice of callback parameters is not important,
 we have used `next` here but `callback` elsewhere;
 whatever is clearer to you.
-
-### No Dependencies
-
-There is no dependency management in `inits`.
-This is deliberate; it would be much more complex
-for something that is not generally needed.
-If you need a certain task to run before another one,
-just run them in sequence.
-
-### Other Lifecycles
-
-Sometimes four phases are not enough.
-`inits` might be designed to support custom phases in the future
-if there is interest; just create an issue if you are interested,
-or even better, send a pull request.
-
-## API
-
-The following functions and events are exported directly by `inits`.
-
-### inits.init(callback)
-
-Add a callback to the initialization.
-
-### inits.start(callback)
-
-Add a callback to be called when starting (after initialization).
-
-### inits.stop(callback)
-
-Add a callback to be called when stopping.
-
-### inits.finish(callback)
-
-Add a callback to be called before finishing.
-
-### inits.standalone(callback)
-
-Set a callback as a standalone task.
-Useful when your script consists solely of a task
-that must run after startup, followed by shutdown.
-
-### Event: 'ready'
-
-Sent when initialization has finished and the system is ready.
-
-### Event: 'end'
-
-Sent after the system has finished and is about to exit.
-Can be used e.g. to call `process.exit()` (which `inits` doesn't do by itself).
-
-### Event: 'error'
-
-Sent when there is an error in any phase.
 
 ## Options
 
@@ -189,6 +164,80 @@ Default: `true`.
 If set to `true` (or any other truthy value),
 `inits` will log how long initialization and shutdown took.
 Default: `true`.
+
+## Lifecycle of a System
+
+There are four distinct phases in `inits`:
+
+* init,
+* start,
+* stop,
+* and finish.
+
+They are intended to be symmetric:
+if a certain capability is open in `init`
+it should be closed in `finish`,
+and whatever starts in `start`
+should be stopped in (surprise!) `stop`.
+
+### Init Phase
+
+Initialization tasks, ideal for low-level stuff
+such as connecting to the database.
+The init system will make sure that all `require`'d code files have been loaded
+before starting this phase.
+
+### Start Phase
+
+Tasks to start the system, such as starting a web server.
+These run after all `init` tasks have finished.
+
+### Stop Phase
+
+Tasks to stop the system, such as stopping any open servers.
+These run when the system initiates shutdown: either by a signal
+(SIGTERM, SIGKILL or control-C) or by an uncaught exception
+or an error.
+
+### Finish Phase
+
+Final shutdown tasks, such as disconnecting from the database:
+whatever needs to be done before the system definitely closes down.
+
+### No Dependencies
+
+There is no dependency management in `inits`.
+This is deliberate; it would be much more complex
+for something that is not generally needed.
+If you need a certain task to run before another one,
+just run them in sequence.
+
+### Guarantees
+
+`inits` makes the following guarantees:
+
+* All tasks in the `init` phase are run before the `start` phase.
+* All tasks in the `start` phase are run before the `ready` event.
+* Only one standalone task is called, after the `start` phase
+and before the `stop` phase.
+* All tasks in the `stop` phase are run after an error or a SIGTERM or SIGKILL signal.
+* All tasks in the `finish` phase are run before finishing,
+even if there is an error in the `stop` phase.
+* The `end` event is only sent if shutdown finishes successfully,
+which includes both the `stop` and `finish` phases.
+* All tasks in any phase are chained serially and in the order they were added:
+each task runs when the previous one has finished
+(and invoked the parameter callback without an error).
+
+If you notice any deviation from these behaviors,
+please [report an issue](https://github.com/alexfernandez/inits/issues/new).
+
+### Other Lifecycles
+
+Sometimes four phases are not enough.
+`inits` might be designed to support custom phases in the future
+if there is interest; just create an issue if you are interested,
+or even better, send a pull request.
 
 ## Full example
 
@@ -251,6 +300,4 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-
 
