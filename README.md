@@ -122,7 +122,7 @@ or even better, send a pull request.
 
 ## API
 
-The following functions and events are available.
+The following functions and events are exported directly by `inits`.
 
 ### inits.init(callback)
 
