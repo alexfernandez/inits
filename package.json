@@ -1,6 +1,6 @@
 {
 	"name": "inits",
-	"version": "0.0.7",
+	"version": "0.1.0",
 	"description": "Init system for Node.js.",
 	"homepage": "https://github.com/alexfernandez/inits",
 	"contributors": ["Alex Fernández <alexfernandeznpm@gmail.com>"],
@@ -17,7 +17,7 @@
 	"devDependencies": {
 		"testing": "*"
 	},
-	"keywords" : ["init", "init system", "initialization", "initialize", "events"],
+	"keywords" : ["init", "init system", "initialization", "asynchronous initialization", "initialize", "events"],
 	"engines": {
 		"node": ">=0.10.3"
 	},
