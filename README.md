@@ -29,6 +29,27 @@ Or add `inits` to your `package.json`:
 
 and run `npm install`.
 
+## Rationale
+
+The typical use case is this:
+you have several asynchronous initialization tasks and you need to them to proceed orderly.
+Sometimes your web server is starting up and accepting requests before your database connection is up,
+so you are showing an error some of the time.
+Your notification system is getting tripped by these errors.
+So you add a delay to the database initialization but as your system grows in complexity
+there are more and more initialization tasks and again errors creep up once in a while.
+
+Same thing happens during shutdown:
+you have a queue that accumulates data and writes it to the database every minute,
+and you want to clear the queue before closing down.
+But as a good citizen you also want to close your database connections.
+Unless you are careful, the database may be closed when you try to write that data out.
+
+`inits` adds an `init` phase where you can stick all of these asynchronous initialization tasks,
+and a `start` phase to start up servers.
+Symmetrically there is a `stop` phase during which servers and queues are closed,
+and then a `finish` phase for final shutdown tasks.
+
 ## API
 
 The following functions and events are exported directly by `inits`.
