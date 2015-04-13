@@ -194,6 +194,12 @@ If set to `true` (or any other truthy value),
 `inits` will show a log message for every error.
 Default: `true`.
 
+### showTraces
+
+If set to `true` (or any other truthy value),
+`inits` will show the trace for error messages.
+Default: `false`.
+
 ### logTimes
 
 If set to `true` (or any other truthy value),
