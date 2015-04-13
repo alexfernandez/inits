@@ -160,6 +160,13 @@ If set to `true` (or any other truthy value),
 and shutdown when one of them is received.
 Default: `true`.
 
+### exitProcess
+
+If set to `true` (or any other truthy value),
+`inits` will exit after shutdown
+(with code 0 if successful, or code 1 if it fails).
+Default: `true`.
+
 ### showErrors
 
 If set to `true` (or any other truthy value),
