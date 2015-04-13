@@ -19,6 +19,7 @@ var log = new Log('info');
 function testInitSystem(callback)
 {
 	var system = new inits.InitSystem();
+	system.options.exitProcess = false;
 	var witness = {};
 	system.on('error', function(error)
 	{
@@ -66,6 +67,7 @@ function testInitSystem(callback)
 function testStandalone(callback)
 {
 	var system = new inits.InitSystem();
+	system.options.exitProcess = false;
 	var witness = {};
 	system.on('error', function(error)
 	{
@@ -101,6 +103,7 @@ function testStandalone(callback)
 function testSeveralCallbacks(callback)
 {
 	var system = new inits.InitSystem();
+	system.options.exitProcess = false;
 	var witness = {};
 	system.on('error', function(error)
 	{
@@ -149,6 +152,7 @@ function testSeveralCallbacks(callback)
 function testExceptions(callback)
 {
 	var system = new inits.InitSystem();
+	system.options.exitProcess = false;
 	system.options.showErrors = false;
 	var init1 = false;
 	system.on('error', function(error)
