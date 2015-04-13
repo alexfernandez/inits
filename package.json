@@ -1,6 +1,6 @@
 {
 	"name": "inits",
-	"version": "0.0.6",
+	"version": "0.0.7",
 	"description": "Init system for Node.js.",
 	"homepage": "https://github.com/alexfernandez/inits",
 	"contributors": ["Alex Fernández <alexfernandeznpm@gmail.com>"],
