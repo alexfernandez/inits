@@ -149,7 +149,7 @@ function testSeveralCallbacks(callback)
 	});
 }
 
-function testExceptions(callback)
+function testErrors(callback)
 {
 	var system = new inits.InitSystem();
 	system.options.exitProcess = false;
@@ -194,6 +194,28 @@ function testExceptions(callback)
 	});
 }
 
+function testErrorWithoutListener(callback)
+{
+	var system = new inits.InitSystem();
+	system.options.exitProcess = false;
+	system.options.showErrors = false;
+	var finish = false;
+	system.init(function(next)
+	{
+		next('init1');
+	});
+	system.finish(function(next)
+	{
+		finish = true;
+		next(null);
+	});
+	system.on('end', function()
+	{
+		testing.assert(finish, 'Should have finished', callback);
+		testing.success(callback);
+	});
+}
+
 /**
  * Run all tests.
  */
@@ -203,7 +225,8 @@ exports.test = function(callback)
 		testInitSystem,
 		testStandalone,
 		testSeveralCallbacks,
-		testExceptions,
+		testErrors,
+		testErrorWithoutListener,
 	], callback);
 };
 
