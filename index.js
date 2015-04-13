@@ -8,8 +8,8 @@
 
 // requires
 require('prototypes');
-var InitSystem = require('./lib/initSystem.js');
+var initSystem = require('./lib/initSystem.js');
 
 
-module.exports = new InitSystem();
+module.exports = initSystem;
 
