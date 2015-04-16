@@ -283,6 +283,25 @@ Sometimes four phases are not enough.
 if there is interest; just create an issue if you are interested,
 or even better, send a pull request.
 
+### Unexpected Exit
+
+In Node.js v0.12.x and io.js, there is an event
+[beforeExit](https://nodejs.org/api/process.html#process_event_beforeexit)
+that can be used to force an ordered shutdown when there is nothing else to do
+and the event loop empties.
+However in Node.js v0.10.x there is no official way to catch this situation;
+the process can just finish without running the `stop` or `finish` callbacks.
+rather than rely on complex intervals we have opted to just
+let Node.js finish, but alert the user about this.
+
+If you don't want your process to exit unexpectedly you can use a `standalone` callback.
+You may also create a `setInterval()`,
+or just keep your servers running and not call `unref()` on them.
+In this last case your processes will keep running and only exit
+when the appropriate signal arrives.
+All of these methods will prevent your process from finishing without
+running the `stop` and `finish` callbacks.
+
 ## Full example
 
 How to make a web server that connects to a MongoDB database.
