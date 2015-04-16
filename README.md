@@ -50,6 +50,9 @@ and a `start` phase to start up servers.
 Symmetrically there is a `stop` phase during which servers and queues are closed,
 and then a `finish` phase for final shutdown tasks.
 
+An additional advantage of using `inits` is that all initialization code runs in a domain,
+thus catching errors and uncaught exceptions.
+
 ## API
 
 The following functions and events are exported directly by `inits`.
