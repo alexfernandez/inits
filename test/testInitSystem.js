@@ -154,6 +154,7 @@ function testErrors(callback)
 	var system = new inits.InitSystem();
 	system.options.exitProcess = false;
 	system.options.showErrors = false;
+	system.options.stopOnError = true;
 	var init1 = false;
 	system.on('error', function(error)
 	{
@@ -199,6 +200,7 @@ function testErrorWithoutListener(callback)
 	var system = new inits.InitSystem();
 	system.options.exitProcess = false;
 	system.options.showErrors = false;
+	system.options.stopOnError = true;
 	var finish = false;
 	system.init(function(next)
 	{
