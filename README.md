@@ -209,6 +209,13 @@ If set to `true` (or any other truthy value),
 `inits` will log how long initialization and shutdown took.
 Default: `true`.
 
+### stopOnError
+
+If set to `true` (or any other truthy value),
+if a callback in any phase returns an error the phase will stop.
+If `false` errors will just be logged (if configured).
+Default: `false`.
+
 ## Lifecycle of a System
 
 There are four distinct phases in `inits`:
