@@ -8,6 +8,7 @@
 // requires
 var testing = require('testing');
 var Log = require('log');
+var inits = require('./lib/initSystem.js');
 
 // globals
 var log = new Log('info');
@@ -33,6 +34,6 @@ exports.test = function(callback)
 // run tests if invoked directly
 if (__filename == process.argv[1])
 {
-	exports.test(testing.show);
+	inits.standalone(testing.toShow(exports.test));
 }
 
