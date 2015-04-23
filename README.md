@@ -216,6 +216,12 @@ if a callback in any phase returns an error the phase will stop.
 If `false` errors will just be logged (if configured).
 Default: `false`.
 
+### maxTaskTimeSec
+
+If any callback takes more than this number of seconds,
+a warning will be shown on the log.
+Default: 10.
+
 ## Lifecycle of a System
 
 There are four distinct phases in `inits`:
