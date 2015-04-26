@@ -57,10 +57,10 @@ thus catching errors and uncaught exceptions.
 
 The following functions and events are exported directly by `inits`.
 
-### inits.init(callback)
+### inits.init(task)
 
-Add an asynchronous callback to the init phase.
-The callback will receive a function parameter of the form
+Add an asynchronous task to the init phase.
+The task will receive a function parameter of the form
 `function(error)`; see below.
 
 Example:
@@ -81,24 +81,24 @@ inits.init(function(next)
 });
 ```
 
-### inits.start(callback)
+### inits.start(task)
 
-Add an asynchronous callback to be invoked when starting
+Add an asynchronous task to be invoked when starting
 (start phase, after init).
 
-### inits.stop(callback)
+### inits.stop(task)
 
-Add an asynchronous callback to be invoked when stopping
+Add an asynchronous task to be invoked when stopping
 (stop phase).
 
-### inits.finish(callback)
+### inits.finish(task)
 
-Add an asynchronous callback to be invoked before finishing
+Add an asynchronous task to be invoked before finishing
 (finish phase, after stop phase).
 
-### inits.standalone(callback)
+### inits.standalone(task)
 
-Set an asynchronous callback as a standalone task.
+Set an asynchronous task as standalone.
 Useful when your script consists solely of a task
 that must run after startup, followed by shutdown.
 
@@ -123,10 +123,10 @@ Sent before the corresponding phases have run.
 
 Sent after the corresponding phases have run.
 
-## Callbacks
+## Tasks
 
-All asynchronous callbacks passed to the four phases and to `standalone()`
-must receive another callback of the form `function(error)`, following the Node.js convention;
+All asynchronous tasks passed to the four phases and to `standalone()`
+must accept as parameter a callback of the form `function(error)`, following the Node.js convention;
 and chain-call them at the end with either an error
 or a falsy value (`null`, `undefined`, nothing) to signal success.
 
@@ -149,9 +149,9 @@ inits.init(function(next)
 
 Note how the callback `next` is invoked before the function ends;
 this allows `inits` to run asynchronous tasks,
-and to regain execution and run any other callbacks.
+and to regain execution and run any other tasks.
 
-If your callback is synchronous, simply invoke the callback at the end:
+If your task is synchronous, simply invoke the callback at the end:
 
 ```
 inits.finish(function(next)
@@ -212,13 +212,13 @@ Default: `true`.
 ### stopOnError
 
 If set to `true` (or any other truthy value),
-if a callback in any phase returns an error the phase will stop.
+if a task in any phase returns an error the phase will stop.
 If `false` errors will just be logged (if configured).
 Default: `false`.
 
 ### maxTaskTimeSec
 
-If any callback takes more than this number of seconds,
+If any task takes more than this number of seconds,
 a warning will be shown on the log.
 Default: 10.
 
@@ -303,17 +303,17 @@ In Node.js v0.12.x and io.js, there is an event
 that can be used to force an ordered shutdown when there is nothing else to do
 and the event loop empties.
 However in Node.js v0.10.x there is no official way to catch this situation;
-the process can just finish without running the `stop` or `finish` callbacks.
+the process can just finish without running the `stop` or `finish` tasks.
 rather than rely on complex intervals we have opted to just
 let Node.js finish, but alert the user about this.
 
-If you don't want your process to exit unexpectedly you can use a `standalone` callback.
+If you don't want your process to exit unexpectedly you can use a `standalone` task.
 You may also create a `setInterval()`,
 or just keep your servers running and not call `unref()` on them.
 In this last case your processes will keep running and only exit
 when the appropriate signal arrives.
 All of these methods will prevent your process from finishing without
-running the `stop` and `finish` callbacks.
+running the `stop` and `finish` tasks.
 
 ## Full example
 

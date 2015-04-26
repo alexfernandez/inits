@@ -100,7 +100,7 @@ function testStandalone(callback)
 	});
 }
 
-function testSeveralCallbacks(callback)
+function testSeveralTasks(callback)
 {
 	var system = new inits.InitSystem();
 	system.options.exitProcess = false;
@@ -226,7 +226,7 @@ exports.test = function(callback)
 	testing.run([
 		testInitSystem,
 		testStandalone,
-		testSeveralCallbacks,
+		testSeveralTasks,
 		testErrors,
 		testErrorWithoutListener,
 	], callback);
