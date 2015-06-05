@@ -161,11 +161,6 @@ function testErrors(callback)
 		if (error.contains('init1'))
 		{
 			init1 = true;
-			return;
-		}
-		else if (error.contains('finish1'))
-		{
-			testing.assert(init1, 'Should catch init1 error', callback);
 			testing.success(callback);
 		}
 		else
