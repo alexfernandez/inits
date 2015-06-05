@@ -279,7 +279,9 @@ just run them in sequence.
 and before the `stop` phase.
 * All tasks in the `stop` phase are run after an error or a SIGTERM or SIGKILL signal.
 * All tasks in the `finish` phase are run before finishing,
-even if there is an error in the `stop` phase.
+except if there is an error while starting up or shutting down.
+(*Note*: before version 0.1.15 finish tasks were run if there were
+errors during any phase.)
 * The `end` event is only sent if shutdown finishes successfully,
 which includes both the `stop` and `finish` phases.
 * All tasks in any phase are chained serially and in the order they were added:

@@ -196,20 +196,19 @@ function testErrorWithoutListener(callback)
 	system.options.exitProcess = false;
 	system.options.showErrors = false;
 	system.options.stopOnError = true;
-	var finish = false;
 	system.init(function(next)
 	{
 		next('init1');
+		testing.success(callback);
 	});
 	system.finish(function(next)
 	{
-		finish = true;
-		next(null);
+		testing.failure('Should not finish', callback);
+		next('fail');
 	});
 	system.on('end', function()
 	{
-		testing.assert(finish, 'Should have finished', callback);
-		testing.success(callback);
+		testing.failure('Should not end', callback);
 	});
 }
 
