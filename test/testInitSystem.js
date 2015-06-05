@@ -236,6 +236,6 @@ exports.test = function(callback)
 if (__filename == process.argv[1])
 {
 	log = new Log('debug');
-	inits.standalone(testing.toShow(exports.test));
+	inits.standalone(exports.test);
 }
 
