@@ -170,7 +170,7 @@ function testErrors(callback)
 		}
 		else
 		{
-			testing.failure('Invalid error ' + error);
+			testing.failure('Invalid error: ' + error);
 		}
 	});
 	system.init(function(next)
