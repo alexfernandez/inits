@@ -106,10 +106,15 @@ that must run after startup, followed by shutdown.
 
 Sent when initialization has finished and the system is ready.
 
+### Event: 'shutdown'
+
+Sent when the system is starting an ordered shutdown:
+it will run the tasks for `stop` and `finish`, then exit.
+
 ### Event: 'end'
 
 Sent after the system has finished and is about to exit.
-Can be used e.g. to call `process.exit()` (which `inits` doesn't do by itself).
+Can be used e.g. to print a warning message.
 
 ### Event: 'error'
 
