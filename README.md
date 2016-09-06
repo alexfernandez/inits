@@ -291,7 +291,12 @@ errors during any phase.)
 which includes both the `stop` and `finish` phases.
 * All tasks in any phase are chained serially and in the order they were added:
 each task runs when the previous one has finished
-(and invoked the parameter callback without an error).
+(but only if it invoked the parameter callback without an error).
+
+This is of course if tasks do not finish in error.
+In that case the process will try to shutdown,
+but if the error happens while shutting down
+`inits` will just exit.
 
 If you notice any deviation from these behaviors,
 please [report an issue](https://github.com/alexfernandez/inits/issues/new).
