@@ -293,9 +293,9 @@ which includes both the `stop` and `finish` phases.
 each task runs when the previous one has finished
 (but only if it invoked the parameter callback without an error).
 
-This is of course if tasks do not finish in error.
+These guarantees only apply if tasks do not finish in error.
 In that case the process will try to shutdown,
-but if the error happens while shutting down
+but if the error happens while starting up or shutting down
 `inits` will just exit.
 
 If you notice any deviation from these behaviors,
