@@ -155,12 +155,10 @@ function testErrors(callback)
 	system.options.exitProcess = false;
 	system.options.showErrors = false;
 	system.options.stopOnError = true;
-	var init1 = false;
 	system.on('error', function(error)
 	{
 		if (error.contains('init1'))
 		{
-			init1 = true;
 			testing.success(callback);
 		}
 		else
