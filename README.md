@@ -227,6 +227,16 @@ If any task takes more than this number of seconds,
 a warning will be shown on the log.
 Default: 10.
 
+### initInParallel, startInParallel, stopInParallel, finishInParallel
+
+If any of these is set to `true`(or any other truthy value),
+then tasks in the corresponding phase
+(init, start, stop or finish)
+are run in parallel.
+Each task is invoked before waiting for the last one to end.
+The phase will only end once all of the tasks have ended.
+Default: `false`, which means tasks run in sequence.
+
 ## Lifecycle of a System
 
 There are four distinct phases in `inits`:
