@@ -18,7 +18,7 @@ var log = new Log('info');
 
 function testInitSystem(callback)
 {
-	var system = new inits.InitSystem();
+	var system = inits.create();
 	system.options.exitProcess = false;
 	var witness = {};
 	system.on('error', function(error)
@@ -66,7 +66,7 @@ function testInitSystem(callback)
 
 function testStandalone(callback)
 {
-	var system = new inits.InitSystem();
+	var system = inits.create();
 	system.options.exitProcess = false;
 	var witness = {};
 	system.on('error', function(error)
@@ -102,7 +102,7 @@ function testStandalone(callback)
 
 function testSeveralTasks(callback)
 {
-	var system = new inits.InitSystem();
+	var system = inits.create();
 	system.options.exitProcess = false;
 	var witness = {};
 	system.on('error', function(error)
@@ -151,7 +151,7 @@ function testSeveralTasks(callback)
 
 function testErrors(callback)
 {
-	var system = new inits.InitSystem();
+	var system = inits.create();
 	system.options.exitProcess = false;
 	system.options.showErrors = false;
 	system.options.stopOnError = true;
@@ -190,7 +190,7 @@ function testErrors(callback)
 
 function testErrorWithoutListener(callback)
 {
-	var system = new inits.InitSystem();
+	var system = inits.create();
 	system.options.exitProcess = false;
 	system.options.showErrors = false;
 	system.options.stopOnError = true;
