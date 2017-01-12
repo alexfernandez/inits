@@ -34,6 +34,6 @@ exports.test = function(callback)
 // run tests if invoked directly
 if (__filename == process.argv[1])
 {
-	inits.standalone(testing.toShow(exports.test));
+	inits.standalone(exports.test);
 }
 
