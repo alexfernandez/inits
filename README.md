@@ -178,6 +178,12 @@ If set to `true` (or any other truthy value),
 and shutdown automatically when any of those happens.
 Default: `true`.
 
+Example:
+
+```
+inits.options.catchErrors = false;
+```
+
 ### catchSignals
 
 If set to `true` (or any other truthy value),
