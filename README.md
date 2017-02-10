@@ -60,23 +60,23 @@ The following functions and events are exported directly by `inits`.
 ### inits.init(task)
 
 Add an asynchronous task to the init phase.
-The task will receive a function parameter of the form
+The task will receive a callback parameter of the form
 `function(error)`; see below.
 
 Example:
 
 ```
-inits.init(function(next)
+inits.init(function(callback)
 {
     doSomething(function(error)
     {
         if (error)
         {
             console.error('failure: %s', error);
-            next(error);
+            callback(error);
         }
         console.log('success');
-        next(null);
+        callback(null);
     });
 });
 ```
@@ -138,37 +138,33 @@ or a falsy value (`null`, `undefined`, nothing) to signal success.
 Example:
 
 ```
-inits.init(function(next)
+inits.init(function(callback)
 {
     DatabaseDriver.connect(url, function(error, connected)
     {
         if (error)
         {
-            return next(error);
+            return callback(error);
         }
         db = connected;
-        next(null);
+        callback(null);
     });
 });
 ```
 
-Note how the callback `next` is invoked before the function ends;
+Note how the `callback` is invoked before the function ends;
 this allows `inits` to run asynchronous tasks,
 and to regain execution and run any other tasks.
 
 If your task is synchronous, simply invoke the callback at the end:
 
 ```
-inits.finish(function(next)
+inits.finish(function(callback)
 {
     db.close();
-    next(null);
+    callback(null);
 });
 ```
-
-Note: the choice of callback parameters is not important,
-we have used `next` here but `callback` elsewhere;
-whatever is clearer to you.
 
 ## Options
 
