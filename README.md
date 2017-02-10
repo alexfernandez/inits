@@ -166,6 +166,26 @@ inits.finish(function(callback)
 });
 ```
 
+### Dependencies
+
+Dependencies can be managed after adding a task to a queue.
+Just call `before()` or `after()` on the result. Example:
+
+```
+inits.init(first).before(second);
+```
+
+`inits` will place this first callback before the second,
+even if the second has not been added yet.
+
+Note: dependency management is deliberately simple:
+no nested dependencies can be added,
+and only one dependency per task should be specified.
+This is deliberate; it would be much more complex
+for something that is not generally needed.
+If you need a certain task to run before two others,
+just run them in sequence.
+
 ## Options
 
 To configure `inits` you can set some attributes in `inits.options`
@@ -278,14 +298,6 @@ or an error.
 Final shutdown tasks, such as disconnecting from the database:
 whatever needs to be done before the system definitely closes down.
 
-### No Dependencies
-
-There is no dependency management in `inits`.
-This is deliberate; it would be much more complex
-for something that is not generally needed.
-If you need a certain task to run before another one,
-just run them in sequence.
-
 ### Guarantees
 
 `inits` makes the following guarantees:
@@ -304,6 +316,8 @@ which includes both the `stop` and `finish` phases.
 * All tasks in any phase are chained serially and in the order they were added:
 each task runs when the previous one has finished
 (but only if it invoked the parameter callback without an error).
+* Tasks added specifying that they should be run before (after) another task
+will run before (after) that task.
 
 These guarantees only apply if tasks do not finish in error.
 In that case the process will try to shutdown,
