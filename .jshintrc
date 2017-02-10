@@ -13,5 +13,6 @@
 	"unused": true,     // Do not allow unused vars
 	"funcscope": false, // Do not allow using a var out of its virtual scope
 	"loopfunc": true,   // Allow functions in loops
+	"asi": true,        // Do not require semicolons
 	"undef": true       // Force vars declaration before using them
 }
