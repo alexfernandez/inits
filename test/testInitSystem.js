@@ -210,41 +210,6 @@ function testErrorWithoutListener(callback)
 	});
 }
 
-function testConstraints(callback)
-{
-	var system = inits.create();
-	system.log = log;
-	system.options.exitProcess = false;
-	var firstRun = false;
-	var secondRun = false;
-	var thirdRun = false;
-	function first(next)
-	{
-		testing.assert(!secondRun, 'First should run before second', callback);
-		testing.assert(!thirdRun, 'First should run before third', callback);
-		firstRun = true;
-		next();
-	}
-	function second(next)
-	{
-		testing.assert(firstRun, 'Second should run after first', callback);
-		testing.assert(!thirdRun, 'Second should run before third', callback);
-		secondRun = true;
-		next();
-	}
-	function third(next)
-	{
-		testing.assert(firstRun, 'Third should run after first', callback);
-		testing.assert(secondRun, 'Third should run after second', callback);
-		thirdRun = true;
-		next();
-		testing.success(callback);
-	}
-	system.init(third).after(second);
-	system.init(second);
-	system.init(first).before(second);
-}
-
 /**
  * Run all tests.
  */
@@ -256,7 +221,6 @@ exports.test = function(callback)
 		testSeveralTasks,
 		testErrors,
 		testErrorWithoutListener,
-		testConstraints,
 	], callback);
 };
 
