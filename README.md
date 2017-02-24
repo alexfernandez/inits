@@ -166,9 +166,23 @@ inits.finish(function(callback)
 });
 ```
 
-### Priorities (TBD)
+### Task Order
 
-A priority system is in the works to specify dependencies.
+Tasks can be ordered to run in a certain sequence.
+When adding a task you can specify its order as first parameter:
+
+```
+inits.init(1, function(callback)
+{
+    db.close();
+    callback(null);
+});
+```
+
+`inits` will run first all tasks with order `1`,
+then all tasks with order `2`,
+and so on.
+Finally it will run all tasks without specific order.
 
 ## Options
 
@@ -297,9 +311,13 @@ except if there is an error while starting up or shutting down.
 errors during any phase.)
 * The `end` event is only sent if shutdown finishes successfully,
 which includes both the `stop` and `finish` phases.
-* All tasks in any phase are chained serially and in the order they were added:
+* When no order is specified,
+all tasks in any phase are chained serially and in the order they were added:
 each task runs when the previous one has finished
 (but only if it invoked the parameter callback without an error).
+* When order is specified, tasks with a given order will run before all other tasks with larger order,
+and after all other tasks with smaller order.
+* Tasks with specified order will run before tasks without specified order.
 
 These guarantees only apply if tasks do not finish in error.
 In that case the process will try to shutdown,

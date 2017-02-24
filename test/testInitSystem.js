@@ -149,7 +149,7 @@ function testSeveralTasks(callback)
 	});
 }
 
-function testPriorities(callback)
+function testOrdered(callback)
 {
 	var system = inits.create();
 	system.options.exitProcess = false;
@@ -269,7 +269,7 @@ exports.test = function(callback)
 		testInitSystem,
 		testStandalone,
 		testSeveralTasks,
-		testPriorities,
+		testOrdered,
 		testErrors,
 		testErrorWithoutListener,
 	], callback);
