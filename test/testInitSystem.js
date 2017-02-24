@@ -40,12 +40,12 @@ function testInitSystem(callback)
 	});
 	system.on('ready', function()
 	{
-		testing.assert(witness.start, 'Should call start', callback);
+		testing.assert(witness.start, 'Should call start before ready', callback);
 		system.shutdown();
 	});
 	system.stop(function(next)
 	{
-		testing.assert(witness.start, 'Should call start', callback);
+		testing.assert(witness.start, 'Should call start before stop', callback);
 		witness.stop = true;
 		log.debug('stop');
 		next(null);
