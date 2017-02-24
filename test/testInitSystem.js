@@ -149,6 +149,56 @@ function testSeveralTasks(callback)
 	});
 }
 
+function testPriorities(callback)
+{
+	var system = inits.create();
+	system.options.exitProcess = false;
+	var witness = {};
+	system.on('error', function(error)
+	{
+		testing.failure(error, callback);
+	});
+	system.init(function(next)
+	{
+		testing.assert(witness.init4, 'Should call init4', callback);
+		witness.init5 = true;
+		log.debug('init5');
+		next(null);
+	});
+	system.init(3, function(next)
+	{
+		testing.assert(witness.init1, 'Should call init1', callback);
+		witness.init3 = true;
+		log.debug('init3');
+		next(null);
+	});
+	system.init(1, function(next)
+	{
+		witness.init1 = true;
+		log.debug('init1');
+		next(null);
+	});
+	system.init(4, function(next)
+	{
+		testing.assert(witness.init3, 'Should call init3', callback);
+		witness.init4 = true;
+		log.debug('init4');
+		next(null);
+	})
+	system.standalone(function(next)
+	{
+		testing.assert(witness.init5, 'Should call init5', callback);
+		witness.standalone = true;
+		log.debug('standalone');
+		next();
+	});
+	system.on('end', function()
+	{
+		testing.assert(witness.standalone, 'Should call standalone', callback);
+		testing.success(callback);
+	});
+}
+
 function testErrors(callback)
 {
 	var system = inits.create();
@@ -219,6 +269,7 @@ exports.test = function(callback)
 		testInitSystem,
 		testStandalone,
 		testSeveralTasks,
+		testPriorities,
 		testErrors,
 		testErrorWithoutListener,
 	], callback);
