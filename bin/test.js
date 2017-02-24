@@ -8,7 +8,7 @@
 // requires
 var testing = require('testing');
 var Log = require('log');
-var inits = require('./lib/initSystem.js');
+var inits = require('../lib/initSystem.js');
 
 // globals
 var log = new Log('info');
@@ -22,7 +22,7 @@ exports.test = function(callback)
 	log.debug('Running tests');
 	var tests = {};
 	var libs = [
-		'./test/testInitSystem.js',
+		'../test/testInitSystem.js',
 	];
 	libs.forEach(function(lib)
 	{

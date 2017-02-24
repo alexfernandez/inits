@@ -23,7 +23,7 @@
 	},
 	"preferGlobal": false,
 	"scripts": {
-		"test": "node runTests.js"
+		"test": "node bin/test.js"
 	},
 	"private": false
 }
