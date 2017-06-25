@@ -49,6 +49,26 @@ Unless you are careful, the database may be closed when you try to write that da
 and a `start` phase to start up servers.
 Symmetrically there is a `stop` phase during which servers and queues are closed,
 and then a `finish` phase for final shutdown tasks.
+Example:
+
+```
+inits.init(function(callback)
+{
+	db.initialize(function(error)
+	{
+		if (error) return callback(error);
+		db.createPool(callback);
+	});
+});
+inits.finish(function(callback)
+{
+	db.flush(function(error)
+	{
+		if (error) return callback(error);
+		db.destroyPool(callback);
+	});
+});
+```
 
 An additional advantage of using `inits` is that all initialization code runs in a domain,
 thus catching errors and uncaught exceptions.
